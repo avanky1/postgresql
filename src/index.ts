@@ -2,6 +2,7 @@
 
   
  import express from 'express';
+import { isCatchClause } from 'typescript';
 
  const app = express();
 app.use(express.json());
@@ -16,13 +17,25 @@ app.post("/signup",async (req, res) => {
      const password = req.body.password;
      const email = req.body.email;
 
+     try{
+          const insertQuery = `INSERT INTO users (username, email, password) VALUES ('${username}', '${email}', '${password}')`;
 
-     const insertQuery = `INSERT INTO users (username, password, email) VALUES ('${username}', '${password}', '${email}')`;
-     const response = await pgClient.query(insertQuery);
-     
-     res.json({
-          message: "User created successfully"
-     })
+          console.log(insertQuery);
+
+          //const response = await pgClient.query(insertQuery);
+          
+          res.json({
+               message: "User created successfully"
+          })
+
+     } catch(e){
+          res.json({
+               message: "Error creating user"
+          })
+     }
+
+
+    
 })
 
 app.listen(3000, () => {

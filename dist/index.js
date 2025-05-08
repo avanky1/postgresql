@@ -22,11 +22,19 @@ app.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const username = req.body.username;
     const password = req.body.password;
     const email = req.body.email;
-    const insertQuery = `INSERT INTO users (username, password, email) VALUES ('${username}', '${password}', '${email}')`;
-    const response = yield pgClient.query(insertQuery);
-    res.json({
-        message: "User created successfully"
-    });
+    try {
+        const insertQuery = `INSERT INTO users (username, email, password) VALUES ('${username}', '${email}', '${password}')`;
+        console.log(insertQuery);
+        //const response = await pgClient.query(insertQuery);
+        res.json({
+            message: "User created successfully"
+        });
+    }
+    catch (e) {
+        res.json({
+            message: "Error creating user"
+        });
+    }
 }));
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
